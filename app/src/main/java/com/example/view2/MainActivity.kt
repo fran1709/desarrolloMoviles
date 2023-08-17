@@ -15,7 +15,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 
 class MainActivity : AppCompatActivity() {
-    private var seleccionado = "";
+    private lateinit var seleccionado:String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -30,10 +30,14 @@ class MainActivity : AppCompatActivity() {
         var valor1 = et1.text.toString().toInt()
         var valor2 = et2.text.toString().toInt()
 
-        var resultado = if (seleccionado.compareTo("Suma") == 0)
-            valor1 + valor2
-        else
-            valor1 - valor2
+        // comparando variable global para verificar si es suma
+        val resultado = when (seleccionado){
+            "Suma" -> valor1 + valor2
+            "Resta" ->  valor1 - valor2
+            "Multiplicación" -> valor1 * valor2
+            "División" -> valor1 / valor2
+            else -> {0}
+        }
 
         tvResult.text = resultado.toString()
     }

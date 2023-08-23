@@ -8,12 +8,24 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var startForResult: ActivityResultLauncher<Intent>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         chargeListView()
+
+        startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val data: Intent? = result.data
+                val datos = data?.getStringExtra("datos")
+                // Hacer algo con el resultado recibido de PaisSeleccionado
+                Toast.makeText(this@MainActivity, "Actividad: $datos", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     fun chargeListView(){
@@ -46,6 +58,6 @@ class MainActivity : AppCompatActivity() {
         intent.putExtra("pais", pais)
 
         // Iniciar la Activity2 utilizando el Intent
-        startActivity(intent)
+        startForResult.launch(intent)
     }
 }

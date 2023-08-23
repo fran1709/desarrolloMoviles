@@ -1,5 +1,6 @@
 package com.example.tarea2
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -15,6 +16,7 @@ import androidx.appcompat.app.AlertDialog
 
 class PaisSeleccionado : AppCompatActivity() {
     private lateinit var seleccionado:String
+    private lateinit var datos:String
     val paisesInformation = hashMapOf<String, Any>(
         "Alemania" to hashMapOf<String, Any>(
             "Continente" to "Europa",
@@ -80,17 +82,13 @@ class PaisSeleccionado : AppCompatActivity() {
                 // Se llama cuando no se ha seleccionado nada en el Spinner (opcional)
                 Toast.makeText(this@PaisSeleccionado, "Nada", Toast.LENGTH_SHORT).show()
             }
-
-
         }
     }
-    fun llamarActivity(view: View, datos: String){
-        // Crear un Intent para iniciar la Activity2
-        val intent = Intent(this, MainActivity::class.java)
-
+    fun llamarActivity(view: View){
         // TODO: Enviando datos seleccionados por un Intent.
+        val intent = Intent()
         intent.putExtra("datos", datos)
-
+        setResult(Activity.RESULT_OK, intent)
         // Finaliza la activity actual y regresa a la anterior
         finish()
     }
@@ -98,12 +96,22 @@ class PaisSeleccionado : AppCompatActivity() {
     fun mostrarInfo(view: View){
         // Acceder a valores dentro del diccionario interno
         val dato = (paisesInformation[intent.getStringExtra("pais")] as? Map<*, *>)?.get(seleccionado)
+        if (::datos.isInitialized) {
+            val nuevoDato = seleccionado
+            datos = "$datos, $nuevoDato" // Concatenar el nuevo dato a la cadena existente
+        } else {
+            // Inicializar la variable si aún no lo esta
+            datos = seleccionado
+        }
         //val txt: TextView = findViewById(R.id.txtView)
         //txt.text = "dato.toString()"
 
         val dialogView = LayoutInflater.from(this).inflate(R.layout.information_pais, null)
         val txt: TextView = dialogView.findViewById(R.id.txtView)
         txt.text = dato.toString()
+
+        //añadimos a activity la info
+        //datos.plus(seleccionado)
 
         val builder = AlertDialog.Builder(this)
         builder.setView(dialogView)

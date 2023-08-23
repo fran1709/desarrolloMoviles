@@ -49,12 +49,13 @@ class PaisSeleccionado : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pais_seleccionado)
         spinnerExample()
+        val pais : TextView =findViewById(R.id.pais)
+        pais.text = intent.getStringExtra("pais")
     }
 
     private fun spinnerExample(){
         //val elementos = listOf("Elemento 1", "Elemento 2", "Elemento 3")
         val elementos = getResources().getStringArray(R.array.datos);
-
         val spinner: Spinner = findViewById(R.id.spinner)
 
         // Crea un ArrayAdapter usando los elementos y el diseño predeterminado para el spinner
@@ -79,6 +80,8 @@ class PaisSeleccionado : AppCompatActivity() {
                 // Se llama cuando no se ha seleccionado nada en el Spinner (opcional)
                 Toast.makeText(this@PaisSeleccionado, "Nada", Toast.LENGTH_SHORT).show()
             }
+
+
         }
     }
     fun llamarActivity(view: View, datos: String){
@@ -94,11 +97,13 @@ class PaisSeleccionado : AppCompatActivity() {
 
     fun mostrarInfo(view: View){
         // Acceder a valores dentro del diccionario interno
-        //val dato = (paisesInformation[intent.getStringExtra("pais")] as? Map<*, *>)?.get(seleccionado.toString())
+        val dato = (paisesInformation[intent.getStringExtra("pais")] as? Map<*, *>)?.get(seleccionado)
         //val txt: TextView = findViewById(R.id.txtView)
         //txt.text = "dato.toString()"
 
         val dialogView = LayoutInflater.from(this).inflate(R.layout.information_pais, null)
+        val txt: TextView = dialogView.findViewById(R.id.txtView)
+        txt.text = dato.toString()
 
         val builder = AlertDialog.Builder(this)
         builder.setView(dialogView)
